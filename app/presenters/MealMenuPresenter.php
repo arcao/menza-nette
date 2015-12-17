@@ -6,15 +6,16 @@ use Nette;
 use App\Model;
 
 
-class MealsPresenter extends BasePresenter
+class MealMenuPresenter extends BasePresenter
 {
 
-	/** @inject @var \App\Services\Places */
-	public $places;
+	/**
+	 * @var \App\Services\MealMenu @inject */
+	public $mealMenu;
 
 	public function renderDefault()
 	{
-		dump($this->places);
+		dump($this->mealMenu->forDate(1));
 		
 		$this->template->anyVariable = 'any value';
 	}

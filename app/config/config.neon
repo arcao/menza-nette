@@ -3,7 +3,8 @@
 # https://nette.org/security-warning
 #
 parameters:
-    placesFile: %appDir%/config/places/places.neon
+	mealBaseDir: %appDir%/../cache
+	placesFile: %appDir%/config/places/places.neon
 
 php:
 	date.timezone: Europe/Prague
@@ -22,6 +23,7 @@ session:
 services:
 	router: App\RouterFactory::createRouter
 	places: App\Services\Places('%placesFile%')
+	mealMenu: App\Services\MealMenu('%mealBaseDir%')
 
 tracy:
 	maxDepth: 10
