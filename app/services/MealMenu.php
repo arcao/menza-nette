@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use Nette\Database\Context;
+use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 
 class MealMenu
@@ -27,6 +28,40 @@ class MealMenu
 		return $this->fix($data);
 	}
 
+	public function sinceDate($placeId, $date = null, $count = 7)
+	{
+		$files = array();
+
+		$dir = dir($this->resolveDir($placeId));
+		if ($dir === false)
+			return array();
+
+		while(false != ($entry = $dir->read()))
+		{
+			if (strrpos($entry, '.') != 6 || strrchr($entry, '.') != '.tmp')
+				continue;
+			// add filename without ext
+			$files[] = strstr($entry, '.', true);
+		}
+
+		sort($files);
+
+		$datePlain = (is_int($date)) ? date('Ymd', $date) : $date;
+
+		$pos = 0;
+		self::binarySearch($datePlain, $files, 'strcmp', $pos);
+
+		$selection = array_slice($files, $pos, $count);
+
+		$result = array();
+		foreach ($selection AS $item) {
+			$itemDate = DateTime::createFromFormat('Ymd', $entry)->getTimestamp();
+			$result[$itemDate] = $this->forDate($placeId, $item);
+		}
+
+		return $result;
+	}
+
 	public function store($placeId, $date, $data)
 	{
 		$content = serialize($data);
@@ -41,7 +76,11 @@ class MealMenu
 		}
 
 		$datePlain = (is_int($date)) ? date('Ymd', $date) : $date;
-		return $this->baseDir . '/' . $placeId . '/' . $datePlain . '.tmp';
+		return $this->resolveDir($placeId) . '/' . $datePlain . '.tmp';
+	}
+
+	private function resolveDir($placeId) {
+		return $this->baseDir . '/' . $placeId;
 	}
 
 	private function fix($input)
@@ -124,5 +163,36 @@ class MealMenu
 		$hash = md5($hash);
 
 		return $hash.'-'.base64_encode($input);
+	}
+
+	private static function binarySearch($needle, $haystack, $comparator, &$probe)
+	{
+	    $high = Count($haystack) - 1;
+	    $low = 0;
+
+	    while ($high >= $low)
+	    {
+	        $probe = Floor(($high + $low ) / 2);
+	        $comparison = $comparator($haystack[$probe], $needle);
+	        if ($comparison < 0)
+	        {
+	            $low = $probe +1;
+	        }
+	        elseif ($comparison > 0)
+	        {
+		        $high = $probe -1;
+	        }
+	        else
+	        {
+		        return true;
+	        }
+	    }
+	    //The loop ended without a match
+	    //Compensate for needle greater than highest haystack element
+	    if($comparator($haystack[count($haystack)-1], $needle) < 0)
+	    {
+		    $probe = count($haystack);
+	    }
+	    return false;
 	}
 }
