@@ -3,7 +3,7 @@
 # https://nette.org/security-warning
 #
 parameters:
-	mealBaseDir: %appDir%/../cache
+	mealBaseDir: %appDir%/data
 	placesFile: %appDir%/config/places/places.neon
 
 php:
