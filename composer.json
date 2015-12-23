@@ -29,7 +29,8 @@
 		"nette/utils": "~2.3.0",
 		"latte/latte": "~2.3.0",
 		"tracy/tracy": "~2.3.0",
-		"dg/adminer-custom": "~1.6"
+		"dg/adminer-custom": "~1.6",
+		"stekycz/cronner": "~v1.1.1"
 	},
 	"require-dev": {
 		"nette/tester": "~1.3"

@@ -5,4 +5,8 @@ vendor/*
 !.htaccess
 app/config/config.local.neon
 /.idea
-/cache
+/app/data/1/*.tmp
+/app/data/2/*.tmp
+/app/data/3/*.tmp
+/app/data/4/*.tmp
+/app/data/5/*.tmp

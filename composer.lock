@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "24c0cee735968149ed6c9a276bc5da6d",
-    "content-hash": "ea44fbf45df5d2c1f32e78d54c1f2d0e",
+    "hash": "7cced3eafbdf5b2ec60f7b93bb2eabf6",
+    "content-hash": "14d6d51505b2bca3f0e8b6c6a190a14d",
     "packages": [
         {
             "name": "dg/adminer-custom",
@@ -999,6 +999,64 @@
             "description": "Nette Utility Classes",
             "homepage": "https://nette.org",
             "time": "2015-11-30 00:11:35"
+        },
+        {
+            "name": "stekycz/cronner",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stekycz/Cronner.git",
+                "reference": "51082627706d361ca1ea3512b5943a70bcc3f1f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stekycz/Cronner/zipball/51082627706d361ca1ea3512b5943a70bcc3f1f6",
+                "reference": "51082627706d361ca1ea3512b5943a70bcc3f1f6",
+                "shasum": ""
+            },
+            "require": {
+                "nette/bootstrap": "~2.3",
+                "nette/di": "~2.3",
+                "nette/reflection": "~2.3",
+                "nette/safe-stream": "~2.3",
+                "nette/utils": "~2.3",
+                "php": ">=5.3.3",
+                "tracy/tracy": "~2.3"
+            },
+            "require-dev": {
+                "jakub-onderka/php-parallel-lint": "~0.8",
+                "janmarek/mockista": "~1.0",
+                "nette/tester": "~1.3"
+            },
+            "suggest": {
+                "kdyby/console": "Symfony Console integration for Kdyby components",
+                "kdyby/events": "Events for Nette Framework"
+            },
+            "type": "nette-addon",
+            "autoload": {
+                "classmap": [
+                    "Cronner/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Martin Štekl",
+                    "email": "martin.stekl@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Simple tool which helps with maintenance of cron tasks.",
+            "keywords": [
+                "cron",
+                "manager",
+                "nette",
+                "task"
+            ],
+            "time": "2015-03-05 22:11:26"
         },
         {
             "name": "tracy/tracy",
