@@ -25,7 +25,8 @@ class MealMenu
 
 		$content = file_get_contents($file);
 		$data = (array) unserialize($content);
-		return $this->fix($data);
+		$data = $this->addMealQuality($data);
+		return $data;
 	}
 
 	public function sinceDate($placeId, $date = null, $count = 7)
@@ -38,7 +39,7 @@ class MealMenu
 
 		while(false != ($entry = $dir->read()))
 		{
-			if (strrpos($entry, '.') != 6 || strrchr($entry, '.') != '.tmp')
+			if (strrpos($entry, '.') != 10 || strrchr($entry, '.') != '.tmp')
 				continue;
 			// add filename without ext
 			$files[] = strstr($entry, '.', true);
@@ -46,7 +47,7 @@ class MealMenu
 
 		sort($files);
 
-		$datePlain = (is_int($date)) ? date('Ymd', $date) : $date;
+		$datePlain = (is_int($date)) ? date('Y-m-d', $date) : $date;
 
 		$pos = 0;
 		self::binarySearch($datePlain, $files, 'strcmp', $pos);
@@ -55,7 +56,7 @@ class MealMenu
 
 		$result = array();
 		foreach ($selection AS $item) {
-			$itemDate = DateTime::createFromFormat('Ymd', $entry)->getTimestamp();
+			$itemDate = DateTime::createFromFormat('Y-m-d', $item)->getTimestamp();
 			$result[$itemDate] = $this->forDate($placeId, $item);
 		}
 
@@ -75,7 +76,7 @@ class MealMenu
 			$date = time();
 		}
 
-		$datePlain = (is_int($date)) ? date('Ymd', $date) : $date;
+		$datePlain = (is_int($date)) ? date('Y-m-d', $date) : $date;
 		return $this->resolveDir($placeId) . '/' . $datePlain . '.tmp';
 	}
 
@@ -83,78 +84,30 @@ class MealMenu
 		return $this->baseDir . '/' . $placeId;
 	}
 
-	private function fix($input)
+	private function addMealQuality($input)
 	{
-		$sections = Array();
-
-		foreach($input AS $type=> $arr2) {
-			$type = iconv('windows-1250', 'utf-8', $type);
-
-			if (strtolower($type) == 'jídla na obj.') $type = 'Minutka';
-			if ($type == 'Pizza balená') continue;
-			if ($type=='Pizza') continue;
-
-			$foods = Array();
-
-			foreach($arr2 AS $index=>$item)
+		foreach ($input AS &$section)
+		{
+			foreach ($section['meals'] AS &$meal)
 			{
-				$name = $item;
-
-				$price_zcu = 0;
-				$price_zam = 0;
-				$price_ext = 0;
-
-				$allergens = array();
-				$premium = false;
-
-				if (is_array($item))
-				{
-					$name = $item['name'];
-					$price_zcu = $item['price_zcu'];
-					$price_zam = $item['price_zam'];
-					$price_ext = $item['price_ext'];
-					$allergens = (isset($item['alergens'])) ? $item['alergens'] : array();
-					$premium = isset($item['premium']) && $item['premium'];
-				}
-
-				$name = iconv('windows-1250', 'utf-8', $name);
-				$hash = self::hash($name);
-				list($id) = explode('-', $hash);
+				list($id) = explode('-', $meal['hash']);
 				$quality = $this->getQuality($id);
 
 				if ($quality === false)
 					$quality = -1;
 
-				$name = str_replace(', ', ',', $name);
-				$name = str_replace(',', ', ', $name);
-
-				$foods[] = Array(
-					'id'=>$index,
-					'name'=>$name,
-					'priceStudent'=>(float)$price_zcu,
-					'priceStaff'=>(float)$price_zam,
-					'priceExternal'=>(float)$price_ext,
-					'hash'=>$hash,
-					'quality'=>(float)$quality,
-					'allergens'=> $allergens,
-					'premium'=> $premium
-				);
+				$meal['quality'] = $quality;
 			}
-
-			$sections[] = Array(
-				'name'=> $type,
-				'meals'=>$foods
-			);
-
 		}
-		return $sections;
+
+		return $input;
 	}
 
 	private function getQuality($hash) {
 		return $this->database->table('menza_hodnoceni')
 			->select('ROUND((bodu/hlasovalo)) AS score')
 			->where('hash', $hash)
-			->fetchField('score');
+			->fetchField();
 	}
 
 	public static function hash($input) {
@@ -189,7 +142,7 @@ class MealMenu
 	    }
 	    //The loop ended without a match
 	    //Compensate for needle greater than highest haystack element
-	    if($comparator($haystack[count($haystack)-1], $needle) < 0)
+	    if(count($haystack) == 0 || $comparator($haystack[count($haystack)-1], $needle) < 0)
 	    {
 		    $probe = count($haystack);
 	    }

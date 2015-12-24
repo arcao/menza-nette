@@ -15,7 +15,7 @@ class MealMenuPresenter extends BasePresenter
 
 	public function renderDefault()
 	{
-		dump($this->mealMenu->forDate(1));
+		dump($this->mealMenu->sinceDate(1, null, 14));
 		
 		$this->template->anyVariable = 'any value';
 	}
