@@ -71,10 +71,13 @@ class IndexerTask
     private function parse($placeId)
     {
         $today = mktime(0,0,0,Date('m'), Date('d'), Date('Y'));
-        for ($i=0; $i<10; $i++) {
+        echo '<ul>';
+        for ($i=0; $i<8; $i++) {
             $date = $today + $i*DateTime::DAY;
+            echo '<li>' . date('Y-m-d', $date) . '</li>';
             $this->parseAndStorePlace($placeId, $date);
         }
+        echo '</ul>';
     }
 
     private function parseAndStorePlace($placeId, $date = null)
@@ -94,7 +97,7 @@ class IndexerTask
         if (is_null($date))
             $date = time();
 
-        $datePlain = (is_int($placeId)) ? date('Ymd', $date) : $date;
+        $datePlain = (is_int($placeId)) ? date('Y-m-d', $date) : $date;
 
         $url = self::PLACES[$placeId - 1].'?d='. $datePlain;
 
@@ -111,23 +114,37 @@ class IndexerTask
 
         $type = '';
         $result = array();
+        $meals = array();
 
         if (preg_match_all('#<tr(?P<foodtr>.+(?=</tr))</tr>#isUu', $content, $foodList, PREG_SET_ORDER))
         {
-            foreach ($foodList AS $foodItem)
+            for($y = 0; $y < Count($foodList); $y++)
             {
-                if (preg_match('#<td><h2>(?P<type>[^<]+)</h2></td>#isu', $foodItem['foodtr'], $a))
+                $foodItem = $foodList[$y]['foodtr'];
+
+                if (preg_match('#<td><h2>(?P<type>[^<]+)</h2></td>#isu', $foodItem, $a))
                 {
+                    if (count($meals) > 0)
+                    {
+                        $result[] = array(
+                            'name' => $type,
+                            'meals' => $meals
+                        );
+                    }
                     $type = trim($a['type']);
+                    $meals = array();
                     continue;
                 }
 
-                if (preg_match('#<td>(?P<premium><span style=\'color:red\'>\*)?\s*(?P<name>[^<]+)(</span>)?</td><td class="price">(?P<price_zcu>\d+),-</td><td class="price">(?P<price_zam>\d+),-</td><td class="price1">(?P<price_ext>\d+),-</td>#isu', $foodItem['foodtr'], $a)) {
+                if (preg_match('#<td>(?P<premium><span style=\'color:red\'>\*)?\s*((?P<id>\d+)\.\s*)?(?P<name>[^<]+)(</span>)?</td><td class="price">(?P<price_zcu>\d+),-</td><td class="price">(?P<price_zam>\d+),-</td><td class="price1">(?P<price_ext>\d+),-</td>#isu', $foodItem, $a))
+                {
                     $allergens = self::getAllergens($a['name']);
                     $name = self::getNamePlain($a['name']);
                     $premium = isset($a['premium']) && $a['premium'];
+                    $id = (isset($a['id']) && $a['id'] > 0) ? (int) $a['id'] : count($meals) + 1;
 
-                    $result[$type][] = array(
+                    $meals[] = array(
+                        'id'=>$id,
                         'name'=>$name,
                         'priceStudent'=>$a['price_zcu'],
                         'priceStaff'=>$a['price_zam'],
@@ -138,6 +155,14 @@ class IndexerTask
                         'allergens'=>$allergens,
                         'premium'=>$premium);
                 }
+            }
+
+            if (count($meals) > 0)
+            {
+                $result[] = array(
+                    'name' => $type,
+                    'meals' => $meals
+                );
             }
         }
 
