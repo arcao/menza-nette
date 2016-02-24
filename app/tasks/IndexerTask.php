@@ -68,6 +68,22 @@ class IndexerTask
         $this->parse(5);
     }
 
+    /**
+     * @cronner-task Parse menu at Cafe library from skm.zcu.cz
+     */
+    public function parseCafeLibrary()
+    {
+        $this->parse(6);
+    }
+
+    /**
+     * @cronner-task Parse menu at Cafe NTIS from skm.zcu.cz
+     */
+    public function parseCafeNTIS()
+    {
+        $this->parse(7);
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
 
     private function parse($placeId)
