@@ -12,7 +12,7 @@ class IndexerTask
     const PLACES = array(
         'http://skm.zcu.cz/jidelnicek-menzy-bory.html',
         'http://skm.zcu.cz/jidelnicek-menzy-kollarova.html',
-        'http://skm.zcu.cz/bufet-kolej-bolevecka.html',
+        'http://skm.zcu.cz/bufet-kolej-bolevecka-30-32.html',
         'http://skm.zcu.cz/bufet-univerzitni-22.html',
         'http://skm.zcu.cz/bufet-pf-klatovska-51.html'
     );
