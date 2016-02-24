@@ -3,28 +3,40 @@
     address: 'Univerzitní 2764/12, 306 14 Plzeň'
     description: file(menza-bory.html)
     images:
-        - menza-bory.jpg
+        - images/places/menza-bory.jpg
 1:
     name: 'Menza Kollárova (Menza I)'
     address: 'Kollárova 1239/19, 301 00 Plzeň'
     description: file(menza-kollarova.html)
     images:
-        - menza-kollarova.jpg
+        - images/places/menza-kollarova.jpg
 2:
     name: 'Bufet Lochotín (Kolej Bolevecká)'
     address: 'Bolevecká 858/30, 301 00 Plzeň'
     description: file(bufet-lochotin.html)
     images:
-        - bufet-lochotin.jpg
+        - images/places/bufet-lochotin.jpg
 3:
     name: 'Bufet FST'
     address: 'Univerzitní 2762/22, 306 14 Plzeň'
     description: file(bufet-fst.html)
     images:
-        - bufet-fst.jpg
+        - images/places/bufet-fst.jpg
 4:
     name: 'Bufet PF (Pedagogická fakulta)'
-    address: 'Klatovská 51, 301 00 Plzeň'
+    address: 'Klatovská 1736/51, 301 00 Plzeň'
     description: file(bufet-pf.html)
     images:
-        - bufet-pf.jpg
+        - images/places/bufet-pf.gif
+5:
+    name: 'Kavárna univerzitní knihovna'
+    address: 'Univerzitní 2763/18, 301 00 Plzeň'
+    description: file(kavarna-knihovna.html)
+    images:
+        - images/places/kavarna-knihovna.jpg
+6:
+    name: 'Kavárna NTIS'
+    address: 'Technická 2967/8, 301 00 Plzeň'
+    description: file(kavarna-ntis.html)
+    images:
+        - images/places/cafe-ntis.jpg

@@ -14,7 +14,9 @@ class IndexerTask
         'http://skm.zcu.cz/jidelnicek-menzy-kollarova.html',
         'http://skm.zcu.cz/bufet-kolej-bolevecka-30-32.html',
         'http://skm.zcu.cz/bufet-univerzitni-22.html',
-        'http://skm.zcu.cz/bufet-pf-klatovska-51.html'
+        'http://skm.zcu.cz/bufet-pf-klatovska-51.html',
+        'http://skm.zcu.cz/jidelni-listek-kavarna-knihovna.html',
+        'http://skm.zcu.cz/jidelni-listek-cafe-ntis.html'
     );
 
     /**
